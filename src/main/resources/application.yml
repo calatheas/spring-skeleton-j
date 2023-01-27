@@ -1,0 +1,154 @@
+spring:
+  application:
+    name: skeletonj
+  profiles:
+    active: default
+  datasource:
+    driver-class-name: software.aws.rds.jdbc.mysql.Driver
+    url: jdbc:mysql:aws://${DB_ENDPOINT}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 50
+  jpa:
+    hibernate.ddl-auto: none
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+        hbm2ddl:
+          auto: none
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: true
+
+    open-in-view: false
+  messages:
+    basename: messages/message
+    use-code-as-default-message: false
+  flyway:
+    locations: classpath:db/migration
+    driver-class-name: software.aws.rds.jdbc.mysql.Driver
+    url: jdbc:mysql:aws://${DB_ENDPOINT}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    baseline-on-migrate: true
+    enabled: false
+  redis:
+    port: 6379
+    url: ${REDIS_ENDPOINT}
+    session:
+      ttl: 1800
+    temp-session:
+      ttl: 86400
+    key-prefix: skeletonj
+
+server:
+  port: 8081
+  tomcat:
+    threads:
+      max: 512
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    session:
+      timeout: 30s
+
+management:
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include:
+          - health
+          - prometheus
+          - loggers
+      path-mapping:
+        health: healthy
+  health:
+    redis:
+      enabled: false
+  endpoint:
+    loggers:
+      enabled: true
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      session-time: 300000
+    kms:
+      key-arn: ${AWS_KMS_KEY_ARN}
+
+cors:
+  allowed-origins: "*"
+
+feign:
+  httpclient:
+    enabled: true
+  client:
+    config:
+      default:
+        connect-timeout: 30000
+        read-timeout: 30000
+        loggerLevel: FULL
+      webHookClient:
+        connect-timeout: 3000
+        read-timeout: 3000
+        loggerLevel: FULL
+
+internal-service:
+  my:
+    url: ${MY_URL}
+  admin:
+    api-url: ${ADMIN_URL}/api/v1
+
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.calatheas.skeletonj: debug
+    org:
+      springframework:
+        cache: trace
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    com.calatheas.skeletonj: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: stg
+
+logging:
+  level:
+    com.calatheas.skeletonj: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prd
+
+logging:
+  level:
+    com.calatheas.skeletonj: debug
+

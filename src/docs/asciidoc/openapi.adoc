@@ -1,0 +1,10 @@
+= SkeletonJ OpenAPI
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:sectnums:
+
+SkeletonJ OpenAPI 인터페이스 문서

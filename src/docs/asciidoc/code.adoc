@@ -1,0 +1,51 @@
+= SkeletonJ API - Common codes
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
+
+SkeletonJ API 공통코드 문서
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 공통 코드
+
+== [small]#공통 코드 조회#
+
+[red big]#Overview#
+----
+공통 코드 조회 합니다.
+----
+[red big]#HTTP request#
+include::{snippets}/code/getCodes/http-request.adoc[]
+[red big]#HTTP response#
+include::{snippets}/code/getCodes/http-response.adoc[]
+
+== [small]#공통 코드 목록#
+
+include::{snippets}/code/getCodesForDocuments/code-fields-BankAccountTransactionType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-BankAccountType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-BankCode.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-BankRequestReasonType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-ExpirationPeriodType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-OutNameType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PartnerType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointActivationLevel.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointProgressStatus.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointProgressStatusCategory.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointReasonCategory.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointReasonCode.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointRequestStatus.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointTransactionQueryType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointTransactionStatus.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointTransactionType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointUsageType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointWalletStatus.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-PointWalletType.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-RoundingMode.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-SettlementItemClass.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-SettlementStatus.adoc[]
+include::{snippets}/code/getCodesForDocuments/code-fields-TraderType.adoc[]

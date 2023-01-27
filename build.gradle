@@ -1,0 +1,158 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'java'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" // gradle querydsl plugin, 추가 태스크 및 설정 필요
+    id "jacoco"
+}
+
+group = 'com.calatheas'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+    set('springCloudVersion', "2021.0.0")
+    set('queryDslVersion', "5.0.0")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.reflections:reflections:0.10.2'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'mysql:mysql-connector-java'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.mockito:mockito-inline'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.flywaydb:flyway-core'
+    compileOnly 'io.opentracing.contrib:opentracing-spring-jaeger-web-starter:3.3.1'
+    implementation group: 'software.aws.rds', name: 'aws-mysql-jdbc', version: '1.0.0'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.248')
+    implementation 'com.amazonaws:aws-java-sdk-sts'
+    implementation 'com.amazonaws:aws-encryption-sdk-java:2.3.3'
+    implementation 'com.amazonaws:aws-java-sdk-s3'
+
+    //querydsl 추가
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    //redis
+    implementation 'org.redisson:redisson-spring-boot-starter:3.16.3'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    // cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+//querydsl 설정 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+configurations {
+    querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 설정 끝
+
+//jacoco 설정
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        // 원하는 리포트를 켜고 끌 수 있습니다.
+        html.enabled true
+        xml.enabled true
+        csv.enabled false
+
+//  각 리포트 타입 마다 리포트 저장 경로를 설정할 수 있습니다.
+//  html.destination file("$buildDir/jacocoHtml")
+//  xml.destination file("$buildDir/jacoco.xml")
+    }
+}
+//jacoco 설정 끝
+
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+jacocoTestReport {
+    dependsOn test // jacoco 직접 실행시 테스트 선행되어야 함
+
+    // aspect, querydsl 제외
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/calatheas/skeletonj/common/aspect/*",
+                    "com/calatheas/skeletonj/**/domain/Q*"
+            ])
+        }))
+    }
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+
+    attributes 'snippets': snippetsDir
+    sources {
+        include '**/index.adoc'
+        include '**/openapi.adoc'
+        include '**/rc.adoc'
+        include '**/code.adoc'
+        include '**/error.adoc'
+    }
+    baseDirFollowsSourceFile()
+}
+
+bootJar {
+    dependsOn asciidoctor
+
+    // 실제 배포 시, BOOT-INF/classes가 classpath가 되기 때문에 아래와 같이 파일을 복사해야 합니다.
+    // asciidoctor task 안에서 하면 static 디렉토리가 중간에 덮어쓰기가 되기 때문에 제대로 복사가 안됨
+    from("${asciidoctor.outputDir}") {
+        into "BOOT-INF/classes/static/docs"
+    }
+}

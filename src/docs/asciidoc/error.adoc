@@ -1,0 +1,24 @@
+= SkeletonJ API - Common codes
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:sectlinks:
+
+SkeletonJ API 공통 에러코드 문서
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 공통 에러코드
+
+== [small]#공통 에러코드 조회#
+
+[red big]#Overview#
+----
+공통 에러코드를 조회 합니다.
+----
+[red big]#HTTP request#
+include::{snippets}/exception/getErrors/http-request.adoc[]
+[red big]#HTTP response#
+include::{snippets}/exception/getErrors/http-response.adoc[]
