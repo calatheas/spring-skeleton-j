@@ -37,8 +37,6 @@ spring:
     url: ${REDIS_ENDPOINT}
     session:
       ttl: 1800
-    temp-session:
-      ttl: 86400
     key-prefix: skeletonj
 
 server:
@@ -102,8 +100,8 @@ feign:
 internal-service:
   my:
     url: ${MY_URL}
-  admin:
-    api-url: ${ADMIN_URL}/api/v1
+  auth:
+    url: ${AUTH_URL}/api/v1
 
 ---
 spring:

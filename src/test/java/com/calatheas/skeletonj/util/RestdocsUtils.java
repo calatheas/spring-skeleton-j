@@ -18,9 +18,6 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.calatheas.skeletonj.common.interceptor.ApiAuthorizationInterceptor.PARTNER_NID_HEADER_KEY;
-import static com.calatheas.skeletonj.common.interceptor.ApiAuthorizationInterceptor.SESSION_ID_HEADER_KEY;
-import static com.calatheas.skeletonj.common.interceptor.OpenApiAuthorizationInterceptor.GW_CLIENT_ID_IN_OPEN_API_HEADER;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -181,10 +178,9 @@ public class RestdocsUtils {
         builder.header("Endpoint", SCHEME + "://" + HOST); // todo 환경변수 MY_URL 로 교체
 
         if (url.matches("^/openapi.*")) {
-            return builder.header(GW_CLIENT_ID_IN_OPEN_API_HEADER, "Client ID when using gateway");
+            return builder.header("x-openapi-token", "OpenAPI Token");
         } else if (url.matches("^/api.*")) {
-            return builder.header(SESSION_ID_HEADER_KEY, "Session ID")
-                    .header(PARTNER_NID_HEADER_KEY, "Partner NID");
+            return builder.header("x-api-token", "API Token");
         } else {
             return builder;
         }

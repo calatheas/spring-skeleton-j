@@ -1,0 +1,29 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= Sample
+
+== [small]#Request param annotation#
+
+[red big]#Overview#
+
+----
+Request param annotation
+----
+
+[red big]#HTTP request#
+
+include::{snippets}/sample/sampleRequestParamByAnnotation/http-request.adoc[]
+
+[red big]#HTTP response#
+
+include::{snippets}/sample/sampleRequestParamByAnnotation/http-response.adoc[]
+
+[red big]#Request parameters#
+
+include::{snippets}/sample/sampleRequestParamByAnnotation/request-parameters.adoc[]
+
+[red big]#Response fields#
+
+include::{snippets}/sample/sampleRequestParamByAnnotation/response-fields.adoc[]

@@ -1,12 +1,9 @@
 package com.calatheas.skeletonj.common.config;
 
-import com.calatheas.skeletonj.common.constant.AuthorizationInterceptorPath;
 import com.calatheas.skeletonj.common.converter.LocalDateFormatter;
 import com.calatheas.skeletonj.common.converter.LocalDateTimeFormatter;
 import com.calatheas.skeletonj.common.converter.StringToEnumConverterFactory;
 import com.calatheas.skeletonj.common.filter.CustomLoggingFilter;
-import com.calatheas.skeletonj.common.interceptor.ApiAuthorizationInterceptor;
-import com.calatheas.skeletonj.common.interceptor.OpenApiAuthorizationInterceptor;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
@@ -17,12 +14,10 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -41,14 +36,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private String allowedOrigins;
 
     @Autowired
-    @Lazy
-    private ApiAuthorizationInterceptor apiAuthorizationInterceptor;
-
-    @Autowired
-    @Lazy
-    private OpenApiAuthorizationInterceptor openApiAuthorizationInterceptor;
-
-    @Autowired
     private MessageSource messageSource;
 
     @Bean
@@ -61,16 +48,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public CustomLoggingFilter requestPreFilter() {
         return new CustomLoggingFilter(profile);
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(apiAuthorizationInterceptor)
-                .addPathPatterns(AuthorizationInterceptorPath.API_PATH_PATTERNS)
-                .excludePathPatterns(AuthorizationInterceptorPath.EXCLUDE_API_PATH_PATTERNS);
-
-        registry.addInterceptor(openApiAuthorizationInterceptor)
-                .addPathPatterns(AuthorizationInterceptorPath.OPEN_API_PATH_PATTERNS);
     }
 
     @Override

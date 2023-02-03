@@ -16,9 +16,9 @@ import java.util.Set;
 public class CodeDocumentResponse {
     private Map<String, Map<String, String>> codeMap;
 
-    public static CodeDocumentResponse make(CodeQuery adminCodes) {
+    public static CodeDocumentResponse make(CodeQuery codeQuery) {
         Map<String, Map<String, String>> codeMap = new HashMap<>();
-        adminCodes.getCodeMap().forEach(
+        codeQuery.getCodeMap().forEach(
                 (k, v) -> {
                     codeMap.put(k, covertTo(v));
                 }

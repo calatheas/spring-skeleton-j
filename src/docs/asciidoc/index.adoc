@@ -8,3 +8,9 @@
 :sectnums:
 
 SkeletonJ API 인터페이스 문서
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+include::sample.adoc[]

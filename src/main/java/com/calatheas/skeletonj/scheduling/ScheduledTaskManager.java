@@ -17,14 +17,14 @@ public class ScheduledTaskManager {
     // 일별 집계
     @Scheduled(cron = "0 0 1 1/1 * ?")
     @MethodDebounceLock
-    public void aggregatePoint() {
+    public void aggregateDaily() {
         LocalDate aggregateDay = LocalDate.now().minusDays(1);
 
         try {
-            log.info("[Scheduled][aggregatePoint] - start {}", aggregateDay);
-            log.info("[Scheduled][aggregatePoint] - end");
+            log.info("[Scheduled][aggregateDaily] - start {}", aggregateDay);
+            log.info("[Scheduled][aggregateDaily] - end");
         } catch (Exception e) {
-            log.error("[Scheduled][aggregatePoint] - Error occurred ({})", aggregateDay);
+            log.error("[Scheduled][aggregateDaily] - Error occurred ({})", aggregateDay);
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.calatheas.skeletonj.sample;
 
 import com.calatheas.skeletonj.common.annotation.ApiV1Controller;
-import com.calatheas.skeletonj.common.code.PartnerType;
+import com.calatheas.skeletonj.common.code.ItemCode;
+import com.calatheas.skeletonj.common.model.CommonResponse;
 import com.calatheas.skeletonj.sample.model.CustomValidationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,23 +21,23 @@ import java.time.LocalDateTime;
 @Validated
 public class SampleController {
     @GetMapping("/sample/request-param")
-    public SampleModelEnumAndLocalDate sampleRequestParamByAnnotation(@RequestParam PartnerType partnerType, @RequestParam LocalDate startDay, @RequestParam LocalDateTime endDate) {
-        return new SampleModelEnumAndLocalDate(partnerType, startDay, endDate);
+    public CommonResponse<SampleModelEnumAndLocalDate> sampleRequestParamByAnnotation(@RequestParam ItemCode itemCode, @RequestParam LocalDate startDay, @RequestParam LocalDateTime endDate) {
+        return CommonResponse.ok(new SampleModelEnumAndLocalDate(itemCode, startDay, endDate));
     }
 
     @GetMapping("/sample/request-param/model")
     public SampleModelEnumAndLocalDate sampleRequestParamByModel(SampleModelEnumAndLocalDate model) {
-        return new SampleModelEnumAndLocalDate(model.getPartnerType(), model.getStartDay(), model.getEndDate());
+        return new SampleModelEnumAndLocalDate(model.getItemCode(), model.getStartDay(), model.getEndDate());
     }
 
     @PostMapping("/sample/request-body")
     public SampleModelEnumAndLocalDate sampleRequestBody(@RequestBody SampleModelEnumAndLocalDate model) {
-        return new SampleModelEnumAndLocalDate(model.getPartnerType(), model.getStartDay(), model.getEndDate());
+        return new SampleModelEnumAndLocalDate(model.getItemCode(), model.getStartDay(), model.getEndDate());
     }
 
     @GetMapping("/sample")
     public SampleModelEnumAndLocalDate sampleSimpleGet() {
-        return new SampleModelEnumAndLocalDate(PartnerType.POINT_ISSUE, LocalDate.now(), LocalDateTime.now());
+        return new SampleModelEnumAndLocalDate(ItemCode.MAC_BOOK, LocalDate.now(), LocalDateTime.now());
     }
 
     @GetMapping("/sample/custom-validation")
@@ -53,7 +54,7 @@ public class SampleController {
 @Getter
 @AllArgsConstructor
 class SampleModelEnumAndLocalDate {
-    private PartnerType partnerType;
+    private ItemCode itemCode;
     private LocalDate startDay;
     private LocalDateTime endDate;
 }

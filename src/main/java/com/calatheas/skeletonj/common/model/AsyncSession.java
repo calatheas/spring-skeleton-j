@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Asnyc flow 에서 기존 세션 유지
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AsyncSession {
     private final static ThreadLocal<Map<String, Object>> ASYNC_SESSION = ThreadLocal.withInitial(() -> new HashMap<String, Object>());
@@ -16,16 +19,10 @@ public class AsyncSession {
         if (session == null) return;
 
         AsyncSession.setAttribute(GlobalSession.SESSION_ID, session.getSessionId());
-        AsyncSession.setAttribute(GlobalSession.PARTNER_NID, session.getPartner().getPartnerNid());
         AsyncSession.setAttribute(GlobalSession.PARTNER_ID, session.getPartner().getPartnerId());
-        AsyncSession.setAttribute(GlobalSession.PARTNER_NAME, session.getPartner().getPartnerName());
-        AsyncSession.setAttribute(GlobalSession.PARTNER_TYPE, session.getPartner().getPartnerType());
 
         if (session.getAdminUser() != null) {
-            AsyncSession.setAttribute(GlobalSession.ADMIN_USER_NID, session.getAdminUser().getAdminUserNid());
             AsyncSession.setAttribute(GlobalSession.ADMIN_USER_ID, session.getAdminUser().getAdminUserId());
-            AsyncSession.setAttribute(GlobalSession.ADMIN_USER_NAME, session.getAdminUser().getAdminUserName());
-            AsyncSession.setAttribute(GlobalSession.ADMIN_USER_ROLE_TYPE, session.getAdminUser().getRoleType().toString());
         }
     }
 
